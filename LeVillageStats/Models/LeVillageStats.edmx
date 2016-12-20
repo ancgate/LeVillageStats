@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PHOEBEModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="idCity" />
+          </Key>
+          <Property Name="idCity" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cityName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="NeighborHood">
+          <Key>
+            <PropertyRef Name="idNeighborHood" />
+          </Key>
+          <Property Name="idNeighborHood" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="neighborhoodName" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="idPerson" />
+          </Key>
+          <Property Name="idPerson" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="firstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="address" Type="nvarchar" MaxLength="100" />
+          <Property Name="neighborhood" Type="bigint" />
+          <Property Name="telephone" Type="nvarchar" MaxLength="50" />
+          <Property Name="email" Type="nvarchar" MaxLength="50" />
+          <Property Name="baptise" Type="nvarchar" MaxLength="100" />
+          <Property Name="age" Type="int" />
+        </EntityType>
+        <Association Name="FK_NeighborHood_City">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="NeighborHood" Type="Self.NeighborHood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="idCity" />
+            </Principal>
+            <Dependent Role="NeighborHood">
+              <PropertyRef Name="City" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_NeighborHood">
+          <End Role="NeighborHood" Type="Self.NeighborHood" Multiplicity="0..1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NeighborHood">
+              <PropertyRef Name="idNeighborHood" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="neighborhood" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PHOEBEModelStoreContainer">
+          <EntitySet Name="City" EntityType="Self.City" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NeighborHood" EntityType="Self.NeighborHood" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_NeighborHood_City" Association="Self.FK_NeighborHood_City">
+            <End Role="City" EntitySet="City" />
+            <End Role="NeighborHood" EntitySet="NeighborHood" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_NeighborHood" Association="Self.FK_Person_NeighborHood">
+            <End Role="NeighborHood" EntitySet="NeighborHood" />
+            <End Role="Person" EntitySet="Person" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PHOEBEModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="idCity" />
+          </Key>
+          <Property Name="idCity" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cityName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NeighborHoods" Relationship="Self.FK_NeighborHood_City" FromRole="City" ToRole="NeighborHood" />
+        </EntityType>
+        <EntityType Name="NeighborHood">
+          <Key>
+            <PropertyRef Name="idNeighborHood" />
+          </Key>
+          <Property Name="idNeighborHood" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="neighborhoodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="Int64" />
+          <NavigationProperty Name="City1" Relationship="Self.FK_NeighborHood_City" FromRole="NeighborHood" ToRole="City" />
+          <NavigationProperty Name="People" Relationship="Self.FK_Person_NeighborHood" FromRole="NeighborHood" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="idPerson" />
+          </Key>
+          <Property Name="idPerson" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="neighborhood" Type="Int64" />
+          <Property Name="telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="baptise" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="age" Type="Int32" />
+          <NavigationProperty Name="NeighborHood1" Relationship="Self.FK_Person_NeighborHood" FromRole="Person" ToRole="NeighborHood" />
+        </EntityType>
+        <Association Name="FK_NeighborHood_City">
+          <End Role="City" Type="Self.City" Multiplicity="0..1" />
+          <End Role="NeighborHood" Type="Self.NeighborHood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="City">
+              <PropertyRef Name="idCity" />
+            </Principal>
+            <Dependent Role="NeighborHood">
+              <PropertyRef Name="City" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Person_NeighborHood">
+          <End Role="NeighborHood" Type="Self.NeighborHood" Multiplicity="0..1" />
+          <End Role="Person" Type="Self.Person" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NeighborHood">
+              <PropertyRef Name="idNeighborHood" />
+            </Principal>
+            <Dependent Role="Person">
+              <PropertyRef Name="neighborhood" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PHOEBEEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cities" EntityType="Self.City" />
+          <EntitySet Name="NeighborHoods" EntityType="Self.NeighborHood" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <AssociationSet Name="FK_NeighborHood_City" Association="Self.FK_NeighborHood_City">
+            <End Role="City" EntitySet="Cities" />
+            <End Role="NeighborHood" EntitySet="NeighborHoods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Person_NeighborHood" Association="Self.FK_Person_NeighborHood">
+            <End Role="NeighborHood" EntitySet="NeighborHoods" />
+            <End Role="Person" EntitySet="People" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PHOEBEModelStoreContainer" CdmEntityContainer="PHOEBEEntities">
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="PHOEBEModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="idCity" ColumnName="idCity" />
+                <ScalarProperty Name="cityName" ColumnName="cityName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NeighborHoods">
+            <EntityTypeMapping TypeName="PHOEBEModel.NeighborHood">
+              <MappingFragment StoreEntitySet="NeighborHood">
+                <ScalarProperty Name="idNeighborHood" ColumnName="idNeighborHood" />
+                <ScalarProperty Name="neighborhoodName" ColumnName="neighborhoodName" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="PHOEBEModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="idPerson" ColumnName="idPerson" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="neighborhood" ColumnName="neighborhood" />
+                <ScalarProperty Name="telephone" ColumnName="telephone" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="baptise" ColumnName="baptise" />
+                <ScalarProperty Name="age" ColumnName="age" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
